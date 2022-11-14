@@ -8,7 +8,7 @@ After having cloned this repo and opened a proper branch, you can write down you
 tutorial with in the form of an `*.ipynb` file.
 
 In order to upload lighter notebooks we propose a modification to the `config` file
-of `git`. Please paste and copy the contents of the file [`.gitconfig`](link to .gitconfig) 
+of `git`. Please paste and copy the contents of the file [`.gitconfig`](https://github.com/qiboteam/tutorials/blob/clear_notebooks_output/.gitconfig) 
 into your `.git/config` file.
 
 This will clean all your notebook's output.
