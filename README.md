@@ -11,4 +11,4 @@ In order to upload lighter notebooks we propose a modification to the `config` f
 of `git`. Please paste and copy the contents of the file [`.gitconfig`](https://github.com/qiboteam/tutorials/blob/clear_notebooks_output/.gitconfig) 
 into your `.git/config` file.
 
-This will clean all your notebook's output.
+This will clean all your notebook's output when you make a `push`.
