@@ -25,7 +25,7 @@ def main(md_filepath):
 
     # collecting python cells into a python script
     with open(f'{script_name}', 'w') as script:
-        for i, line in enumerate(content):
+        for line in content:
         
             if "```python" in line:
                 copying = True
