@@ -50,13 +50,13 @@ results = platform.execute_pulse_sequence(sequence, options)
 
 <p v-click="2">
 
-`PulseSequence` contains the pulses to be executed. 
+`PulseSequence` contains the pulses to be executed.
 Pulses can be constructed manually through the pulse API,
 or via the `platform`.
 
 </p>
 
-<p v-click="3">
+0
 
 The experiment is deployed using the `Platform`.
 
@@ -188,3 +188,144 @@ def create():
 <arrow v-click="[3, 4]" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
 
 ---
+layout: center
+class: text-center
+---
+
+# Introducing Qibocal
+Qubit calibration using Qibo
+
+---
+
+# Presentation of the program
+
+<img src="figures/qq_qibocal.png" alt="Qibocal scheme">
+
+---
+
+# Routine: data acquisition
+
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+<div flex="~ col" p="t-5">
+
+
+```py{7-9|12-14|17-20}
+from dataclasses import dataclass
+from qibocal.auto.operation import Parameters, Data
+from qibolab.platform import Platform
+from qibolab.qubits import QubitId
+
+
+@dataclass
+class RoutineParameters(Parameters):
+    """Input parameters for YAML runcard."""
+
+
+@dataclass
+class RoutineData(Data):
+    """Data structure for acquisition data."""
+
+
+def acquisition(params: RoutineParameters,
+                platform: Platform,
+                qubits: list[QubitId]) -> RoutineData:
+    """Acquisition protocol."""
+
+```
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+<p v-click="1">
+- `RoutineParameters` experiment configuration.
+
+
+- `RoutineData` data acquired by the protocol
+
+- `RoutineParameters` and `RoutineData` are connected through `acquisition` which
+is the function which will presumably use `Qibolab` code to perform acquisition.
+
+</div>
+</div>
+---
+
+# Routine: post-processing
+
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+<div flex="~ col" p="t-5">
+
+
+```py
+from dataclasses import dataclass
+from qibolab.platform import Platform
+from qibolab.qubits import QubitId
+from qibocal.auto.operation import Results
+
+
+@dataclass
+class RoutineResults(Results):
+    """Post-processed results."""
+
+
+def fit(data: RoutineData) -> RoutineResults:
+    """Extracting features from data."""
+
+
+def update(results: RoutineResults,
+           qubit: QubitId,
+           platform: Platform) -> None:
+    """Updating platform parameters'."""
+
+```
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+- `Routine` experiment configuration.
+
+
+- `RoutineData` data acquired by the protocol
+
+- `RoutineParameters` and `RoutineData` are connected through `acquisition` which
+is the function which will presumably use `Qibolab` code to perform acquisition.
+
+</div>
+</div>
+
+---
+
+# Routine: reporting
+
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+<div flex="~ col" p="t-5">
+
+
+```py
+import plotly.graph_objects as go
+from qibolab.qubits import QubitId
+
+
+def report(data: RoutineData,
+           qubit: QubitId,
+           results: RoutineResults) -> tuple[list[go.Figure], str]:
+    """Updating platform parameters'."""
+
+```
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+`report` is the function where you plot the data or results obtained.
+The return type should include the following:
+
+
+- list of `go.Figure`, which are figure realized with plotly
+
+- a str, which is a generic HTML code that can be injected and it
+  will be rendered correctly in the report
+</div>
+</div>
+```
