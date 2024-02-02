@@ -262,53 +262,7 @@ def create():
 </div>
 
 ---
-
-# Qubit parameters
-
-<div h="full" flex="~ row">
-
-<div flex="~ col">
-
-```py
-native_gates = SingleQubitNatives(
-    MZ=NativePulse(
-        name="MZ",
-        duration=1000,
-        amplitude=0.005,
-        shape="Rectangular()",
-        pulse_type=PulseType.READOUT,
-        qubit=qubit,
-        frequency=int(7e9),
-    ),
-    RX=NativePulse(
-        ...
-    ),
-)
-
-qubit = Qubit(
-    name=0,
-    readout_frequency=7e9,
-    drive_frequency=4.5e9,
-    native_gates=native_gates,
-)
-```
-
-</div>
-
-<div flex="~ col justify-center">
-
-We can register characterization and native gate parameters when creating qubits.
-
-However these are parameters that are usually *calibrated*.
-
-It is useful to store such parameters in an external *database*.
-
-For simplicity we are using YAML (or JSON).
-
-</div>
-
-</div>
-
+clicks: 2
 ---
 
 # Qubit parameters
@@ -345,10 +299,24 @@ qubit = Qubit(
 
 <div flex="~ col">
 
+<div v-if="$clicks == 0">
+
+We can register characterization and native gate parameters when creating qubits.
+
+However these are parameters that are usually *calibrated*.
+
+It is useful to store such parameters in an external *database*.
+
+For simplicity we are providing tools (`qibolab.serialize`) that parse these parameters from YAML (or JSON).
+
+</div>
+
+<div v-if="$clicks >= 1">
+
 ```yaml
 native_gates:
     single_qubit:
-        0: # qubit number
+        0:
             MZ:
                 duration: 1000
                 amplitude: 0.005
@@ -367,6 +335,14 @@ characterization:
             drive_frequency: 4_500_000_000
 
 ```
+
+<p v-click="2">
+
+*Let's now put it all together...* 
+
+</p>
+
+</div>
 
 </div>
 
