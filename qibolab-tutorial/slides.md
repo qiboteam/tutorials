@@ -8,18 +8,20 @@ drawings:
 transition: slide-left
 title: Towards Qibolab 0.2.0
 mdc: true
-layout: image-left
+#layout: image-left
 ---
 
 # Qibolab
 
-Presentation slides for developers
+Getting started tutorial
 
 ---
 clicks: 3
 ---
 
 # `qibolab_hello_world.py`
+
+*Instead of contents...*
 
 <div h="full" flex="~ row" gap="lg" p="sm b-20">
 
@@ -32,7 +34,7 @@ from qibolab.execution_parameters import ExecutionParameters
 
 platform = create_platform("myplatform")
 
-equence = PulseSequence()
+sequence = PulseSequence()
 ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
 sequence.add(ro_pulse)
 
@@ -42,7 +44,7 @@ results = platform.execute_pulse_sequence(sequence, options)
 
 </div>
 
-<div flex="~ col justify-center" v="full" p="t-10">
+<div flex="~ col justify-center">
 
 <p v-click="1">
 
@@ -135,6 +137,8 @@ Pulses can have different types
 </div>
 
 ---
+clicks: 4
+---
 
 # Platform
 
@@ -142,7 +146,7 @@ Pulses can have different types
 
 <div flex="~ col">
 
-```py
+```py {1-5|7-9|11-|1-5}
 @dataclass
 class Platform:
     qubits: QubitMap
@@ -178,9 +182,9 @@ Platform contains information about
 - `pairs`: connectivity and native two-qubit gates
 - `instruments`: used to deploy pulses *(drivers)*
 
-<div v-click="1">
+<div v-click="3">
 
-```py
+```py {all|5-8}
 @dataclass
 class Qubit:
     readout_frequency: int
@@ -192,6 +196,10 @@ class Qubit:
 
     native_gates: SingleQubitNatives
 ```
+
+</div>
+
+<div v-click="4">
 
 Qubits are connected to instruments via channels.
 
@@ -365,14 +373,18 @@ characterization:
 </div>
 
 ---
+clicks: 4
+---
 
-# Creating platform (using `qibolab.serialize`)
+# Creating platforms 
+
+using `qibolab.serialize`
 
 <div h="full" flex="~ row">
 
 <div flex="~ col">
 
-```sh
+```sh {all|3|4|5|all}
 qibolab_platforms/
     myplatform/
         platform.py
@@ -382,11 +394,17 @@ qibolab_platforms/
 
 <br>
 
+<v-clicks at="0">
+
 - `platform.py`: Contains the `create` method that initializes the `Platform`.
 - `parameters.yml`: Contains parameters that are updated during calibration.
 - other files (integration weights, etc.) can also be provided and loaded in `create`.
 
+</v-clicks>
+
 <br>
+
+<div v-click="4">
 
 ```sh
 export QIBOLAB_PLATFORMS=./qibolab_platforms 
@@ -394,9 +412,11 @@ export QIBOLAB_PLATFORMS=./qibolab_platforms
 
 </div>
 
-<div flex="~ col">
+</div>
 
-```py {8-10}
+<div v-click="1" flex="~ col">
+
+```py {all|8-10|8-10|all}{at:1}
 FOLDER = Path(__file__).parent
 
 def create():
