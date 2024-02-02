@@ -8,12 +8,11 @@ drawings:
 transition: slide-left
 title: Towards Qibolab 0.2.0
 mdc: true
-layout: image-left
+layout: center
 ---
 
-# Qibolab
-
-Presentation slides for developers
+# Control and Calibration using Qibo
+Introduction to Qibolab and Qibocal
 
 ---
 
@@ -56,7 +55,7 @@ or via the `platform`.
 
 </p>
 
-0
+<p>
 
 The experiment is deployed using the `Platform`.
 
@@ -199,8 +198,12 @@ Qubit calibration using Qibo
 
 # Presentation of the program
 
-<img src="figures/qq_qibocal.png" alt="Qibocal scheme">
+<center>
+<img src="/qq_qibocal.svg" alt="Qibocal scheme"   width="600">
+</center>
 
+---
+clicks: 3
 ---
 
 # Routine: data acquisition
@@ -210,7 +213,7 @@ Qubit calibration using Qibo
 <div flex="~ col" p="t-5">
 
 
-```py{7-9|12-14|17-20}
+```py{all|7-9|12-14|17-20}
 from dataclasses import dataclass
 from qibocal.auto.operation import Parameters, Data
 from qibolab.platform import Platform
@@ -238,16 +241,28 @@ def acquisition(params: RoutineParameters,
 <div flex="~ col justify-center" v="full" p="t-10">
 
 <p v-click="1">
-- `RoutineParameters` experiment configuration.
 
+`RoutineParameters` experiment configuration.
 
-- `RoutineData` data acquired by the protocol
+</p>
 
-- `RoutineParameters` and `RoutineData` are connected through `acquisition` which
+<p v-click="2">
+
+`RoutineData` data acquired by the protocol
+
+</p>
+
+<p v-click="3">
+
+`RoutineParameters` and `RoutineData` are connected through `acquisition` which
 is the function which will presumably use `Qibolab` code to perform acquisition.
+</p>
 
 </div>
 </div>
+
+---
+clicks: 3
 ---
 
 # Routine: post-processing
@@ -257,7 +272,7 @@ is the function which will presumably use `Qibolab` code to perform acquisition.
 <div flex="~ col" p="t-5">
 
 
-```py
+```py{all|7-9|12-13|16-19}
 from dataclasses import dataclass
 from qibolab.platform import Platform
 from qibolab.qubits import QubitId
@@ -283,17 +298,30 @@ def update(results: RoutineResults,
 
 <div flex="~ col justify-center" v="full" p="t-10">
 
-- `Routine` experiment configuration.
+<p v-click="1">
 
+`RoutineResults` class containing the analysis of the raw data
 
-- `RoutineData` data acquired by the protocol
+</p>
 
-- `RoutineParameters` and `RoutineData` are connected through `acquisition` which
-is the function which will presumably use `Qibolab` code to perform acquisition.
+<p v-click="2">
+
+`fit` optional function which performs the post-processing analysis
+
+</p>
+
+<p v-click="3">
+
+`update` optional function which updates specific calibration parameters computed
+in `Results`
+
+</p>
 
 </div>
 </div>
 
+---
+clicks: 2
 ---
 
 # Routine: reporting
@@ -303,9 +331,10 @@ is the function which will presumably use `Qibolab` code to perform acquisition.
 <div flex="~ col" p="t-5">
 
 
-```py
+```py{all|6-9|16-17}
 import plotly.graph_objects as go
 from qibolab.qubits import QubitId
+from qibocal.auto.operation import Routine
 
 
 def report(data: RoutineData,
@@ -313,10 +342,23 @@ def report(data: RoutineData,
            results: RoutineResults) -> tuple[list[go.Figure], str]:
     """Updating platform parameters'."""
 
+
+
+
+
+
+# define Routine object
+routine = Routine(acquisition, fit, report, update)
+
+
+
+
 ```
 </div>
 
 <div flex="~ col justify-center" v="full" p="t-10">
+
+<p v-click="1">
 
 `report` is the function where you plot the data or results obtained.
 The return type should include the following:
@@ -326,6 +368,20 @@ The return type should include the following:
 
 - a str, which is a generic HTML code that can be injected and it
   will be rendered correctly in the report
+
+</p>
+
+<p v-click="2">
+
+We can create an instance of `Routine` by passing `acquisition`,
+`fit`, `report` and `update`.
+
+</p>
 </div>
 </div>
-```
+
+---
+layout: center
+---
+
+# Thanks for listening
