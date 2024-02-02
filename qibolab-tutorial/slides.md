@@ -483,6 +483,8 @@ Averaging modes:
 </div>
 
 ---
+clicks: 1
+---
 
 # Real-time sweeps
 
@@ -490,17 +492,7 @@ Averaging modes:
 
 <div flex="~ col" p="t-5">
 
-```py {17-22}{maxHeight:'1000px'}
-import numpy as np
-from qibolab import create_platform
-from qibolab.pulses import PulseSequence
-from qibolab.sweeper import Sweeper, SweeperType, Parameter
-from qibolab.execution_parameters import (
-    ExecutionParameters,
-    AveragingMode,
-    AcquisitionType,
-)
-
+```py {7-12|all}
 platform = create_platform("myplatform")
 
 equence = PulseSequence()
