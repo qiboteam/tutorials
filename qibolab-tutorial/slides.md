@@ -28,7 +28,7 @@ from qibolab import create_platform
 from qibolab.pulses import PulseSequence
 from qibolab.execution_parameters import ExecutionParameters
 
-platform = create_platform("dummy")
+platform = create_platform("myplatform")
 
 equence = PulseSequence()
 ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
@@ -111,6 +111,7 @@ Pulse waveforms can have different shapes
 - `Rectangular`
 - `Exponential`
 - `Gaussian`
+- `GaussianSquare`
 - `Drag`
 
 </p>
@@ -131,60 +132,288 @@ Pulses can have different types
 
 ---
 
-# Code
+# Platform
 
-Use code snippets and get the highlighting directly, and even types hover![^1]
+<div h="full" flex="~ row">
 
-```py {all|5|1-6|9|all}
-def create():
-    # Create a controller instrument
-    instrument = DummyInstrument("my_instrument", "0.0.0.0:0")
+<div flex="~ col">
 
-    # Create channel objects and assign to them the controller ports
-    channels = ChannelMap()
-    channels |= Channel("ch1out", port=instrument["o1"])
-    channels |= Channel("ch2", port=instrument["o2"])
-    channels |= Channel("ch1in", port=instrument["i1"])
+```py
+@dataclass
+class Platform:
+    qubits: QubitMap
+    pairs: QubitPairMap
+    instruments: InstrumentMap
 
-    # create the qubit object
-    qubit = Qubit(0)
+    def connect(self):
 
-    # assign native gates to the qubit
-    qubit.native_gates = SingleQubitNatives(
-        RX=NativePulse(
-            name="RX",
-            duration=40,
-            amplitude=0.05,
-            shape="Gaussian(5)",
-            pulse_type=PulseType.DRIVE,
-            qubit=qubit,
-            frequency=int(4.5e9),
-        ),
-        MZ=NativePulse(
-            name="MZ",
-            duration=1000,
-            amplitude=0.005,
-            shape="Rectangular()",
-            pulse_type=PulseType.READOUT,
-            qubit=qubit,
-            frequency=int(7e9),
-        ),
-    )
+    def disconnect(self):
 
-    # assign channels to the qubit
-    qubit.readout = channels["ch1out"]
-    qubit.feedback = channels["ch1in"]
-    qubit.drive = channels["ch2"]
+    def execute_pulse_sequence(
+        self, 
+        sequences: PulseSequence, 
+        options: ExecutionParameters
+    ):
 
-    # create dictionaries of the different objects
-    qubits = {qubit.name: qubit}
-    pairs = {}  # empty as for single qubit we have no qubit pairs
-    instruments = {instrument.name: instrument}
+    def sweep(
+        self, 
+        sequence: PulseSequence, 
+        options: ExecutionParameters, 
+        *sweepers: Sweeper
+    ):
 
-    # allocate and return Platform object
-    return Platform("my_platform", qubits, pairs, instruments, resonator_type="3D")
 ```
 
-<arrow v-click="[3, 4]" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
+</div>
+
+<div flex="~ col">
+
+Platform contains information about
+
+- `qubits`: characterization and native single-qubit gates
+- `pairs`: connectivity and native two-qubit gates
+- `instruments`: used to deploy pulses *(drivers)*
+
+<div v-click="1">
+
+```py
+@dataclass
+class Qubit:
+    readout_frequency: int
+    drive_frequency: int
+
+    readout: Optional[Channel]
+    feedback: Optional[Channel]
+    drive: Optional[Channel]
+
+    native_gates: SingleQubitNatives
+```
+
+Qubits are connected to instruments via channels.
+
+</div>
+
+</div>
+
+</div>
 
 ---
+
+# Creating platforms
+
+<div h="full" flex="~ row">
+
+<div flex="~ col">
+
+```py {all|2|4-12|14-16|18-23}
+def create():
+    instrument = DummyInstrument("myinstr", "0.0.0.0:0")
+
+    channels = ChannelMap()
+    channels |= Channel(
+        "readout", 
+        port=instrument.ports("o1")
+    )
+    channels |= Channel(
+        "feedback", 
+        port=instrument.ports("o2", output=False)
+    )
+
+    qubit = Qubit(0)
+    qubit.readout = channels["readout"]
+    qubit.feedback = channels["feedback"]
+
+    return Platform(
+        "myplatform", 
+        qubits={qubit.name: qubit}, 
+        pairs={}, 
+        instruments={instrument.name: instrument},
+    )
+```
+
+</div>
+
+<div flex="~ col" v="full" p="t-10">
+
+<p v-click="1">Instantiate instrument objects.</p>
+
+<p v-click="2">Create channels and connect them to instruments.</p>
+
+<p v-click="3">Create qubits and connect them to channels.</p>
+
+<p v-click="4">Instantiate platform with all the information.</p>
+
+</div>
+
+</div>
+
+---
+
+# Qubit parameters
+
+<div h="full" flex="~ row">
+
+<div flex="~ col">
+
+```py
+native_gates = SingleQubitNatives(
+    MZ=NativePulse(
+        name="MZ",
+        duration=1000,
+        amplitude=0.005,
+        shape="Rectangular()",
+        pulse_type=PulseType.READOUT,
+        qubit=qubit,
+        frequency=int(7e9),
+    ),
+    RX=NativePulse(
+        ...
+    ),
+)
+
+qubit = Qubit(
+    name=0,
+    readout_frequency=7e9,
+    drive_frequency=4.5e9,
+    native_gates=native_gates,
+)
+```
+
+</div>
+
+<div flex="~ col justify-center">
+
+We can register characterization and native gate parameters when creating qubits.
+
+However these are parameters that are usually *calibrated*.
+
+It is useful to store such parameters in an external *database*.
+
+For simplicity we are using YAML (or JSON).
+
+</div>
+
+</div>
+
+---
+
+# Qubit parameters
+
+<div h="full" flex="~ row">
+
+<div flex="~ col">
+
+```py
+native_gates = SingleQubitNatives(
+    MZ=NativePulse(
+        name="MZ",
+        duration=1000,
+        amplitude=0.005,
+        shape="Rectangular()",
+        pulse_type=PulseType.READOUT,
+        qubit=qubit,
+        frequency=int(7e9),
+    ),
+    RX=NativePulse(
+        ...
+    ),
+)
+
+qubit = Qubit(
+    name=0,
+    readout_frequency=7e9,
+    drive_frequency=4.5e9,
+    native_gates=native_gates,
+)
+```
+
+</div>
+
+<div flex="~ col">
+
+```yaml
+native_gates:
+    single_qubit:
+        0: # qubit number
+            MZ:
+                duration: 1000
+                amplitude: 0.005
+                frequency: 7_000_000_000
+                shape: Rectangular()
+                type: ro # readout
+                start: 0
+                phase: 0
+            RX:
+                ...
+
+characterization:
+    single_qubit:
+        0:
+            readout_frequency: 7_000_000_000
+            drive_frequency: 4_500_000_000
+
+```
+
+</div>
+
+</div>
+
+---
+
+# Creating platform (using `qibolab.serialize`)
+
+<div h="full" flex="~ row">
+
+<div flex="~ col">
+
+```sh
+qibolab_platforms/
+    myplatform/
+        platform.py
+        parameters.yml  # -> parameters.json
+        kernels.npz # (optional)
+```
+
+<br>
+
+- `platform.py`: Contains the `create` method that initializes the `Platform`.
+- `parameters.yml`: Contains parameters that are updated during calibration.
+- other files (integration weights, etc.) can also be provided and loaded in `create`.
+
+<br>
+
+```sh
+export QIBOLAB_PLATFORMS=./qibolab_platforms 
+```
+
+</div>
+
+<div flex="~ col">
+
+```py {8-10}
+FOLDER = Path(__file__).parent
+
+def create():
+    instrument = DummyInstrument("myinstr", "0.0.0.0:0")
+
+    channels = ChannelMap()
+    channels |= ...
+    
+    runcard = load_runcard(FOLDER)
+    qubits, couplers, pairs = load_qubits(runcard)
+
+    qubits[0].readout = channels["readout"]
+    qubits[0].feedback = channels["feedback"]
+    qubits[0].drive = channels[f"ch{q + 2}"]
+
+    return Platform(
+        "myplatform", 
+        qubits, 
+        pairs, 
+        instruments={instrument.name: instrument}, 
+    )
+```
+
+</div>
+
+</div>
