@@ -16,6 +16,8 @@ layout: image-left
 Presentation slides for developers
 
 ---
+clicks: 3
+---
 
 # `qibolab_hello_world.py`
 
@@ -67,6 +69,8 @@ The experiment is deployed using the `Platform`.
 </div>
 
 ---
+clicks: 3
+---
 
 # Pulse API
 
@@ -74,7 +78,7 @@ The experiment is deployed using the `Platform`.
 
 <div flex="~ col" p="t-5">
 
-```py {all|9|10|1}
+```py {all|9|10|0}
 from qibolab.pulses import Pulse, PulseType, Rectangular
 
 pulse = Pulse(
@@ -197,6 +201,8 @@ Qubits are connected to instruments via channels.
 
 </div>
 
+---
+clicks: 4
 ---
 
 # Creating platforms
@@ -413,6 +419,117 @@ def create():
         instruments={instrument.name: instrument}, 
     )
 ```
+
+</div>
+
+</div>
+
+---
+clicks: 2
+---
+
+# Acquiring results
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+
+<div flex="~ col" p="t-5">
+
+```py {all|16-18|10-11}{at:0}
+
+platform = create_platform("myplatform")
+
+equence = PulseSequence()
+ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
+sequence.add(ro_pulse)
+
+options = ExecutionParameters(
+    nshots=1000,
+    relaxation_time=100000,
+    acquisition_type=AcquisitionType.DISCRIMINATION
+    averaging_mode=AveragingMode.SINGLESHOT
+
+)
+results = platform.execute_pulse_sequence(sequence, options)
+
+print(results[ro_pulse.serial].samples)
+print(results[0].samples)
+```
+
+<p v-click="1">
+
+`results` is a `dict` from `pulse.serial` to a results object.
+
+</p>
+
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+<div v-click="2">
+
+Acquisition types:
+- `RAW`: (I, Q) waveform
+- `INTEGRATION`: (I, Q) voltage
+- `DISCRIMINATION`: samples
+
+Averaging modes:
+- `CYCLIC`
+- `SINGLESHOT`
+
+</div>
+
+</div>
+
+</div>
+
+---
+
+# Real-time sweeps
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+
+<div flex="~ col" p="t-5">
+
+```py {17-22}{maxHeight:'1000px'}
+import numpy as np
+from qibolab import create_platform
+from qibolab.pulses import PulseSequence
+from qibolab.sweeper import Sweeper, SweeperType, Parameter
+from qibolab.execution_parameters import (
+    ExecutionParameters,
+    AveragingMode,
+    AcquisitionType,
+)
+
+platform = create_platform("myplatform")
+
+equence = PulseSequence()
+ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
+sequence.add(ro_pulse)
+
+sweeper = Sweeper(
+    parameter=Parameter.frequency,
+    values=np.arange(-2e8, +2e8, 1e6),
+    pulses=[ro_pulse],
+    type=SweeperType.OFFSET,
+)
+
+options = ExecutionParameters(
+    nshots=1000,
+    relaxation_time=1000,
+    acquisition_type=AcquisitionType.INTEGRATION,
+    averaging_mode=AveragingMode.CYCLIC
+
+)
+results = platform.sweep(sequence, options, sweeper)
+```
+
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+Executing sweeps in real time is usually faster because 
+it requires less communication with the instruments.
 
 </div>
 
