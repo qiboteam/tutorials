@@ -491,7 +491,7 @@ clicks: 1
 ```py {7-12|all}
 platform = create_platform("myplatform")
 
-equence = PulseSequence()
+sequence = PulseSequence()
 ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
 sequence.add(ro_pulse)
 
@@ -522,3 +522,9 @@ it requires less communication with the instruments.
 </div>
 
 </div>
+
+---
+layout: center
+---
+
+# Thanks
