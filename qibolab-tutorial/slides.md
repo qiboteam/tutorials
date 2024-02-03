@@ -469,6 +469,7 @@ Acquisition types:
 - `DISCRIMINATION`: samples
 
 Averaging modes:
+- `SEQUENTIAL` *(not recommended)*
 - `CYCLIC`
 - `SINGLESHOT`
 
@@ -488,7 +489,7 @@ clicks: 1
 
 <div flex="~ col" p="t-5">
 
-```py {7-12|all}
+```py {7-12|14-20}
 platform = create_platform("myplatform")
 
 sequence = PulseSequence()
@@ -507,7 +508,6 @@ options = ExecutionParameters(
     relaxation_time=1000,
     acquisition_type=AcquisitionType.INTEGRATION,
     averaging_mode=AveragingMode.CYCLIC
-
 )
 results = platform.sweep(sequence, options, sweeper)
 ```
@@ -518,6 +518,50 @@ results = platform.sweep(sequence, options, sweeper)
 
 Executing sweeps in real time is usually faster because 
 it requires less communication with the instruments.
+
+</div>
+
+</div>
+
+---
+clicks: 1
+---
+
+# Sequence unrolling
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+
+<div flex="~ col" p="t-5">
+
+```py {3-9|11-17}
+platform = create_platform("myplatform")
+
+nsequences = 20
+for _ in range(nsequences):
+    sequence = PulseSequence()
+    if np.random.random() > 0.5:
+        sequence.add(platform.create_RX_pulse(qubit=0, start=0))
+    sequence.add(platform.create_MZ_pulse(qubit=0, start=sequence.finish))
+    sequences.append(sequence)
+
+options = ExecutionParameters(
+    nshots=1000,
+    relaxation_time=100000,
+    acquisition_type=AcquisitionType.DISCRIMINATION,
+    averaging_mode=AveragingMode.SINGLESHOT,
+)
+results = platform.execute_pulse_sequences(sequences, options)
+```
+
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+Passing multiple sequences in a single call is usually faster because 
+it requires less communication with the instruments.
+
+Sometimes sequences need to be *batched* in order to fit in the instruments
+memory (WIP).
 
 </div>
 
