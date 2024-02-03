@@ -1,0 +1,16 @@
+actions:
+- id: single shot classification
+  main: null
+  next: null
+  operation: single_shot_classification
+  parameters:
+    nshots: 5000
+  priority: 0
+  qubits: []
+  update: true
+  validator: null
+backend: qibolab
+max_iterations: 5
+platform: dummy
+qubits:
+- 0
