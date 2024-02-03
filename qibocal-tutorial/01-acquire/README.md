@@ -43,3 +43,8 @@ To produce an HTML report with the acquired data it is possible to use the
 ```sh
 qq report <output_folder>
 ```
+
+We will now find an `index.html` file inside output folder:
+
+
+<iframe src="index.html" width="600" height="400"></iframe>

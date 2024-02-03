@@ -1,0 +1,24 @@
+actions:
+- id: resonator flux dependence
+  main: null
+  next: null
+  operation: resonator_flux
+  parameters:
+    bias_step: 0.1
+    bias_width: 2
+    freq_step: 100000
+    freq_width: 5000000
+    nshots: 1024
+    relaxation_time: 20000
+  priority: 0
+  qubits: []
+  update: true
+  validator: null
+backend: qibolab
+platform: qw5q_gold
+qubits:
+- 0
+- 1
+- 2
+- 3
+- 4

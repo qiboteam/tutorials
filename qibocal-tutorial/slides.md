@@ -200,8 +200,34 @@ We can create an instance of `Routine` by passing `acquisition`,
 </div>
 </div>
 
+
 ---
 layout: center
 ---
 
 # Thanks for listening
+
+
+
+---
+layout: center
+---
+
+# Useful pages in documentation
+---
+layout: iframe
+# the web page source
+url: https://qibo.science/qibocal/stable/getting-started/runcard.html
+---
+
+---
+layout: iframe
+
+url: https://qibo.science/qibocal/stable/tutorials/advanced.html#how-to-use-qibocal-as-a-library
+---
+
+---
+layout: iframe
+
+url: https://qibo.science/qibocal/stable/tutorials/advanced.html#how-to-add-a-new-protocol
+---
