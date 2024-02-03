@@ -46,25 +46,13 @@ results = platform.execute_pulse_sequence(sequence, options)
 
 <div flex="~ col justify-center">
 
-<p v-click="1">
-
 `Platform` represents the lab configuration, containing all information about the available qubits and orchestrating the instruments.
-
-</p>
-
-<p v-click="2">
 
 `PulseSequence` contains the pulses to be executed. 
 Pulses can be constructed manually through the pulse API,
 or via the `platform`.
 
-</p>
-
-<p v-click="3">
-
 The experiment is deployed using the `Platform`.
-
-</p>
 
 </div>
 
@@ -95,8 +83,6 @@ pulse = Pulse(
 )
 ```
 
-<div v-click="3">
-
 `PulseSequence` is a list of pulses
 
 ```py
@@ -106,11 +92,7 @@ sequence.add(Pulse(...))
 
 </div>
 
-</div>
-
 <div flex="~ col justify-center" v="full" p="t-10">
-
-<p v-click="1">
 
 Pulse waveforms can have different shapes
 
@@ -120,17 +102,11 @@ Pulse waveforms can have different shapes
 - `GaussianSquare`
 - `Drag`
 
-</p>
-
-<p v-click="2">
-
 Pulses can have different types
 
 - `PulseType.READOUT`
 - `PulseType.DRIVE`
 - `PulseType.FLUX`
-
-</p>
 
 </div>
 
@@ -182,8 +158,6 @@ Platform contains information about
 - `pairs`: connectivity and native two-qubit gates
 - `instruments`: used to deploy pulses *(drivers)*
 
-<div v-click="3">
-
 ```py {all|5-8}
 @dataclass
 class Qubit:
@@ -197,13 +171,7 @@ class Qubit:
     native_gates: SingleQubitNatives
 ```
 
-</div>
-
-<div v-click="4">
-
 Qubits are connected to instruments via channels.
-
-</div>
 
 </div>
 
@@ -249,13 +217,13 @@ def create():
 
 <div flex="~ col" v="full" p="t-10">
 
-<p v-click="1">Instantiate instrument objects.</p>
+Instantiate instrument objects.
 
-<p v-click="2">Create channels and connect them to instruments.</p>
+Create channels and connect them to instruments.
 
-<p v-click="3">Create qubits and connect them to channels.</p>
+Create qubits and connect them to channels.
 
-<p v-click="4">Instantiate platform with all the information.</p>
+Instantiate platform with all the information.
 
 </div>
 
@@ -336,11 +304,7 @@ characterization:
 
 ```
 
-<p v-click="2">
-
 *Let's now put it all together...* 
-
-</p>
 
 </div>
 
@@ -380,17 +344,13 @@ qibolab_platforms/
 
 <br>
 
-<div v-click="4">
-
 ```sh
 export QIBOLAB_PLATFORMS=./qibolab_platforms 
 ```
 
 </div>
 
-</div>
-
-<div v-click="1" flex="~ col">
+<div flex="~ col">
 
 ```py {all|8-10|8-10|all}{at:1}
 FOLDER = Path(__file__).parent
@@ -451,17 +411,11 @@ print(results[ro_pulse.serial].samples)
 print(results[0].samples)
 ```
 
-<p v-click="1">
-
 `results` is a `dict` from `pulse.serial` to a results object.
-
-</p>
 
 </div>
 
 <div flex="~ col justify-center" v="full" p="t-10">
-
-<div v-click="2">
 
 Acquisition types:
 - `RAW`: (I, Q) waveform
@@ -472,8 +426,6 @@ Averaging modes:
 - `SEQUENTIAL` *(not recommended)*
 - `CYCLIC`
 - `SINGLESHOT`
-
-</div>
 
 </div>
 
