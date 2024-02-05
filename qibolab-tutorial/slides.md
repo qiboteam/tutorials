@@ -48,25 +48,10 @@ results = platform.execute_pulse_sequence(sequence, options)
 
 `Platform` represents the lab configuration, containing all information about the available qubits and orchestrating the instruments.
 
-<<<<<<< HEAD
-</p>
-
-<p v-click="2">
-
 `PulseSequence` contains the pulses to be executed.
 Pulses can be constructed manually through the pulse API,
 or via the `platform`.
 
-</p>
-
-<p>
-
-=======
-`PulseSequence` contains the pulses to be executed.
-Pulses can be constructed manually through the pulse API,
-or via the `platform`.
-
->>>>>>> qibolab
 The experiment is deployed using the `Platform`.
 
 </div>
@@ -212,13 +197,8 @@ def create():
         port=instrument.ports("o1")
     )
     channels |= Channel(
-<<<<<<< HEAD
-        "feedback",
-        port=instrument.ports("o2", output=False)
-=======
         "feedback",
         port=instrument.ports("i1", output=False)
->>>>>>> qibolab
     )
 
     qubit = Qubit(0)
@@ -324,13 +304,7 @@ characterization:
 
 ```
 
-<<<<<<< HEAD
-<p v-click="2">
-
 *Let's now put it all together...*
-=======
-*Let's now put it all together...*
->>>>>>> qibolab
 
 </div>
 
