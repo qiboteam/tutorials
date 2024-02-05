@@ -46,10 +46,9 @@ results = platform.execute_pulse_sequence(sequence, options)
 
 <div flex="~ col justify-center">
 
-<p v-click="1">
-
 `Platform` represents the lab configuration, containing all information about the available qubits and orchestrating the instruments.
 
+<<<<<<< HEAD
 </p>
 
 <p v-click="2">
@@ -62,9 +61,13 @@ or via the `platform`.
 
 <p>
 
-The experiment is deployed using the `Platform`.
+=======
+`PulseSequence` contains the pulses to be executed.
+Pulses can be constructed manually through the pulse API,
+or via the `platform`.
 
-</p>
+>>>>>>> qibolab
+The experiment is deployed using the `Platform`.
 
 </div>
 
@@ -95,8 +98,6 @@ pulse = Pulse(
 )
 ```
 
-<div v-click="3">
-
 `PulseSequence` is a list of pulses
 
 ```py
@@ -106,11 +107,7 @@ sequence.add(Pulse(...))
 
 </div>
 
-</div>
-
 <div flex="~ col justify-center" v="full" p="t-10">
-
-<p v-click="1">
 
 Pulse waveforms can have different shapes
 
@@ -120,17 +117,11 @@ Pulse waveforms can have different shapes
 - `GaussianSquare`
 - `Drag`
 
-</p>
-
-<p v-click="2">
-
 Pulses can have different types
 
 - `PulseType.READOUT`
 - `PulseType.DRIVE`
 - `PulseType.FLUX`
-
-</p>
 
 </div>
 
@@ -182,8 +173,6 @@ Platform contains information about
 - `pairs`: connectivity and native two-qubit gates
 - `instruments`: used to deploy pulses *(drivers)*
 
-<div v-click="3">
-
 ```py {all|5-8}
 @dataclass
 class Qubit:
@@ -197,13 +186,7 @@ class Qubit:
     native_gates: SingleQubitNatives
 ```
 
-</div>
-
-<div v-click="4">
-
 Qubits are connected to instruments via channels.
-
-</div>
 
 </div>
 
@@ -229,8 +212,13 @@ def create():
         port=instrument.ports("o1")
     )
     channels |= Channel(
+<<<<<<< HEAD
         "feedback",
         port=instrument.ports("o2", output=False)
+=======
+        "feedback",
+        port=instrument.ports("i1", output=False)
+>>>>>>> qibolab
     )
 
     qubit = Qubit(0)
@@ -249,13 +237,13 @@ def create():
 
 <div flex="~ col" v="full" p="t-10">
 
-<p v-click="1">Instantiate instrument objects.</p>
+Instantiate instrument objects.
 
-<p v-click="2">Create channels and connect them to instruments.</p>
+Create channels and connect them to instruments.
 
-<p v-click="3">Create qubits and connect them to channels.</p>
+Create qubits and connect them to channels.
 
-<p v-click="4">Instantiate platform with all the information.</p>
+Instantiate platform with all the information.
 
 </div>
 
@@ -336,11 +324,13 @@ characterization:
 
 ```
 
+<<<<<<< HEAD
 <p v-click="2">
 
 *Let's now put it all together...*
-
-</p>
+=======
+*Let's now put it all together...*
+>>>>>>> qibolab
 
 </div>
 
@@ -380,17 +370,13 @@ qibolab_platforms/
 
 <br>
 
-<div v-click="4">
-
 ```sh
 export QIBOLAB_PLATFORMS=./qibolab_platforms
 ```
 
 </div>
 
-</div>
-
-<div v-click="1" flex="~ col">
+<div flex="~ col">
 
 ```py {all|8-10|8-10|all}{at:1}
 FOLDER = Path(__file__).parent
@@ -406,7 +392,7 @@ def create():
 
     qubits[0].readout = channels["readout"]
     qubits[0].feedback = channels["feedback"]
-    qubits[0].drive = channels[f"ch{q + 2}"]
+    qubits[0].drive = channels["drive"]
 
     return Platform(
         "myplatform",
@@ -434,14 +420,14 @@ clicks: 2
 
 platform = create_platform("myplatform")
 
-equence = PulseSequence()
+sequence = PulseSequence()
 ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
 sequence.add(ro_pulse)
 
 options = ExecutionParameters(
     nshots=1000,
     relaxation_time=100000,
-    acquisition_type=AcquisitionType.DISCRIMINATION
+    acquisition_type=AcquisitionType.DISCRIMINATION,
     averaging_mode=AveragingMode.SINGLESHOT
 
 )
@@ -451,17 +437,11 @@ print(results[ro_pulse.serial].samples)
 print(results[0].samples)
 ```
 
-<p v-click="1">
-
 `results` is a `dict` from `pulse.serial` to a results object.
-
-</p>
 
 </div>
 
 <div flex="~ col justify-center" v="full" p="t-10">
-
-<div v-click="2">
 
 Acquisition types:
 - `RAW`: (I, Q) waveform
@@ -469,10 +449,9 @@ Acquisition types:
 - `DISCRIMINATION`: samples
 
 Averaging modes:
+- `SEQUENTIAL` *(not recommended)*
 - `CYCLIC`
 - `SINGLESHOT`
-
-</div>
 
 </div>
 
@@ -488,7 +467,7 @@ clicks: 1
 
 <div flex="~ col" p="t-5">
 
-```py {7-12|all}
+```py {7-12|14-20}
 platform = create_platform("myplatform")
 
 sequence = PulseSequence()
@@ -507,7 +486,6 @@ options = ExecutionParameters(
     relaxation_time=1000,
     acquisition_type=AcquisitionType.INTEGRATION,
     averaging_mode=AveragingMode.CYCLIC
-
 )
 results = platform.sweep(sequence, options, sweeper)
 ```
@@ -522,3 +500,52 @@ it requires less communication with the instruments.
 </div>
 
 </div>
+
+---
+clicks: 1
+---
+
+# Sequence unrolling
+
+<div h="full" flex="~ row" gap="lg" p="sm b-20">
+
+<div flex="~ col" p="t-5">
+
+```py {3-9|11-17}
+platform = create_platform("myplatform")
+
+nsequences = 20
+sequences = []
+for _ in range(nsequences):
+    sequence = PulseSequence()
+    sequence.add(platform.create_MZ_pulse(qubit=0, start=sequence.finish))
+    sequences.append(sequence)
+
+options = ExecutionParameters(
+    nshots=1000,
+    relaxation_time=100000,
+    acquisition_type=AcquisitionType.DISCRIMINATION,
+    averaging_mode=AveragingMode.SINGLESHOT,
+)
+results = platform.execute_pulse_sequences(sequences, options)
+```
+
+</div>
+
+<div flex="~ col justify-center" v="full" p="t-10">
+
+Passing multiple sequences in a single call is usually faster because
+it requires less communication with the instruments.
+
+Sometimes sequences need to be *batched* in order to fit in the instruments
+memory (WIP).
+
+</div>
+
+</div>
+
+---
+layout: center
+---
+
+# Thanks
