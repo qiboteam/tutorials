@@ -1,0 +1,35 @@
+nqubits: 1
+
+settings:
+    nshots: 1024
+    relaxation_time": 0
+
+qubits: [0]
+
+topology: []
+
+native_gates:
+    single_qubit:
+        0:
+            MZ:
+                duration: 1000
+                amplitude: 0.005
+                frequency: 7_000_000_000
+                shape: Rectangular()
+                type: ro
+                start: 0
+                phase: 0
+            RX:
+                duration: 40
+                amplitude: 0.005
+                frequency: 4_500_000_000
+                shape: Rectangular()
+                type: qd
+                start: 0
+                phase: 0
+
+characterization:
+    single_qubit:
+        0:
+            readout_frequency: 7_000_000_000
+            drive_frequency: 4_500_000_000
