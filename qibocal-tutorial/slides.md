@@ -15,8 +15,38 @@ layout: center
 Qubit calibration using Qibo
 
 ---
+layout: image-right
+image: ./calibration.png
+backgroundSize: contain
+---
 
-# Presentation of the program
+# How to calibrate superconducting devices?
+
+##
+
+In superconducting qubits gates are implemented
+through microwave pulses.
+
+Several protocols need to be executed to extract
+specific parameters.
+
+After an initial calibration more advanced experiments
+can be performed in order to:
+
+- improve readout
+- run benchmarking protocols
+- reach optimal control
+
+
+---
+layout: image
+image: ./qpu_characterization.svg
+---
+
+
+---
+
+# Qibocal workflow
 
 <center>
 <img src="/qq_qibocal.svg" alt="Qibocal scheme"   width="600">
@@ -229,5 +259,5 @@ url: https://qibo.science/qibocal/stable/tutorials/advanced.html#how-to-use-qibo
 ---
 layout: iframe
 
-url: https://qibo.science/qibocal/stable/tutorials/advanced.html#how-to-add-a-new-protocol
+url: https://qibo.science/qibocal/stable/tutorials/advanced.html
 ---
