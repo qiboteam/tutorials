@@ -198,7 +198,7 @@ def create():
     )
     channels |= Channel(
         "feedback", 
-        port=instrument.ports("o2", output=False)
+        port=instrument.ports("i1", output=False)
     )
 
     qubit = Qubit(0)
@@ -366,7 +366,7 @@ def create():
 
     qubits[0].readout = channels["readout"]
     qubits[0].feedback = channels["feedback"]
-    qubits[0].drive = channels[f"ch{q + 2}"]
+    qubits[0].drive = channels["drive"]
 
     return Platform(
         "myplatform", 
@@ -394,14 +394,14 @@ clicks: 2
 
 platform = create_platform("myplatform")
 
-equence = PulseSequence()
+sequence = PulseSequence()
 ro_pulse = platform.create_MZ_pulse(qubit=0, start=0)
 sequence.add(ro_pulse)
 
 options = ExecutionParameters(
     nshots=1000,
     relaxation_time=100000,
-    acquisition_type=AcquisitionType.DISCRIMINATION
+    acquisition_type=AcquisitionType.DISCRIMINATION,
     averaging_mode=AveragingMode.SINGLESHOT
 
 )
@@ -489,10 +489,9 @@ clicks: 1
 platform = create_platform("myplatform")
 
 nsequences = 20
+sequences = []
 for _ in range(nsequences):
     sequence = PulseSequence()
-    if np.random.random() > 0.5:
-        sequence.add(platform.create_RX_pulse(qubit=0, start=0))
     sequence.add(platform.create_MZ_pulse(qubit=0, start=sequence.finish))
     sequences.append(sequence)
 
