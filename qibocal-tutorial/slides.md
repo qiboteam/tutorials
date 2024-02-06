@@ -98,7 +98,7 @@ def acquisition(params: RoutineParameters,
 
 <p v-click="2">
 
-`RoutineData` data acquired by the protocol
+`RoutineData` data acquired by the protocol.
 
 </p>
 
@@ -150,21 +150,20 @@ def update(results: RoutineResults,
 
 <p v-click="1">
 
-`RoutineResults` class containing the analysis of the raw data
+`RoutineResults` class containing the analysis of the raw data.
 
 </p>
 
 <p v-click="2">
 
-`fit` optional function which performs the post-processing analysis
+`fit` optional function which performs the post-processing analysis.
 
 </p>
 
 <p v-click="3">
 
 `update` optional function which updates specific calibration parameters computed
-in `Results`
-
+in `Results`.
 </p>
 
 </div>
@@ -210,8 +209,8 @@ routine = Routine(acquisition, fit, report, update)
 
 <p v-click="1">
 
-`report` is the function where you plot the data or results obtained.
-[The](The) return type should include the following:
+`report` is the function that plots the data or results obtained.
+The return type should include the following:
 
 
 - list of `go.Figure`, which are figure realized with plotly
@@ -242,7 +241,7 @@ Suppose that we want to code a protocol to perform a RX rotation for different a
 <div flex="~ col">
 <b>Parameters</b>
 <p>
-First, we define the input parameters of our experiment 
+First, we define the input parameters of our experiment
 inheriting the Qibocal <i>Parameters</i> class.
 </p>
 ```py
@@ -280,7 +279,7 @@ RotationType = np.dtype([("theta", np.float64), ("prob", np.float64)])
 class RotationData(Data):
     """Rotation data."""
 
-    data: dict[QubitId, npt.NDArray[RotationType]] = 
+    data: dict[QubitId, npt.NDArray[RotationType]] =
         field(default_factory=dict)
     """Raw data acquired."""
 
@@ -305,19 +304,19 @@ def acquisition(
     platform: Platform,
     qubits: Qubits,
 ) -> RotationData:
-    
+
     angles = np.arange(params.theta_start, params.theta_end, params.theta_step)
-    
+
     data = RotationData()
-    
+
     for angle in angles:
-    
+
         circuit = Circuit(platform.nqubits)
-        
+
         for qubit in qubits:
             circuit.add(gates.RX(qubit, theta=angle))
             circuit.add(gates.M(qubit))
-            
+
         result = circuit(nshots=params.nshots)
 
 ```
@@ -357,9 +356,9 @@ clicks: 3
         result = circuit(nshots=params.nshots)
 
         for qubit in qubits:
-            
+
             prob = result.probabilities(qubits=[qubit])[0]
-            
+
             data.register_qubit(qubit, theta=angle, prob=prob)
 
     return data
@@ -429,7 +428,7 @@ def fit(data: RotationData) -> RotationResults:
 <div flex="~ col">
 <b>Plot function</b>
 <p>
-The report function generates a list of figures and an optional table to be 
+The report function generates a list of figures and an optional table to be
 shown in the html report.
 </p>
 ```py
@@ -443,8 +442,8 @@ def plot(data: RotationData, fit: RotationResults, qubit):
         go.Scatter(
             x=qubit_data.theta,
             y=qubit_data.prob,
-    ... 
-    
+    ...
+
     return figures, fitting_report
 ```
 <p>
