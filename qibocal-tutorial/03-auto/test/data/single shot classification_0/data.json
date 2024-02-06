@@ -2,7 +2,7 @@
     "\"nshots\"": 5000,
     "\"savedir\"": " ",
     "\"qubit_frequencies\"": {
-        "0": 4000500000
+        "0": 3999997188
     },
     "\"classifiers_list\"": [
         "qubit_fit"

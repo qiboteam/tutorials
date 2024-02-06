@@ -11,7 +11,7 @@ mdc: true
 layout: center
 ---
 
-# Introducing Qibocal
+# Introducing Qibocal 0.0.7
 Qubit calibration using Qibo
 
 ---
@@ -394,9 +394,8 @@ class RotationResults(Results):
 ```
 
 ---
----
+
 <div h="full" flex="~ row" gap="lg">
-<p v-click="1">
 <div flex="~ col">
 <b>Fit function</b>
 <p>
@@ -423,8 +422,7 @@ def fit(data: RotationData) -> RotationResults:
     )
 ```
 </div>
-</p>
-<p v-click="2">
+<p v-click="1">
 <div flex="~ col">
 <b>Plot function</b>
 <p>
@@ -500,7 +498,7 @@ actions:
         theta_start: 0
         theta_end: 7
         theta_step: 20
-        nshots: 1024</p>
+        nshots: 1024
 ```
 
 </div>
@@ -554,7 +552,7 @@ The fitting corresponding to the experiment can be launched in the following way
 ```py
 fit, fit_time = experiment.fit(data)
 ```
-It is also possible to access the plots and the tables with the following lines
+it is also possible to access the plots and the tables with the following lines.
 ```py
 # Plot for qubit 0
 qubit = 0

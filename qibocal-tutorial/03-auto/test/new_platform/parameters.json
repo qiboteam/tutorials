@@ -42,7 +42,7 @@
                     "duration": 40,
                     "amplitude": 0.1,
                     "shape": "Gaussian(5)",
-                    "frequency": 4000500000,
+                    "frequency": 3999997188,
                     "relative_start": 0,
                     "phase": 0,
                     "type": "qd"
@@ -381,7 +381,7 @@
             "0": {
                 "bare_resonator_frequency": 0,
                 "readout_frequency": 5200000000.0,
-                "drive_frequency": 4000500000,
+                "drive_frequency": 3999997188,
                 "anharmonicity": 0,
                 "sweetspot": 0.0,
                 "asymmetry": 0.0,
@@ -391,8 +391,8 @@
                 "Ec": 0.0,
                 "Ej": 0.0,
                 "g": 0.0,
-                "assignment_fidelity": 0.4936221100186022,
-                "readout_fidelity": 0.012755779962795644,
+                "assignment_fidelity": 0.49056603773584906,
+                "readout_fidelity": 0.018867924528301883,
                 "effective_temperature": 0.0,
                 "peak_voltage": 0,
                 "pi_pulse_amplitude": 0,
@@ -402,15 +402,15 @@
                 "state0_voltage": 0,
                 "state1_voltage": 0,
                 "mean_gnd_states": [
-                    50.0664794002135,
-                    49.784272055677796
+                    49.03928068025879,
+                    50.47366320501077
                 ],
                 "mean_exc_states": [
-                    50.29461902887189,
-                    49.393445235961146
+                    49.54314422341527,
+                    50.56391209687816
                 ],
-                "threshold": 21.100542097154946,
-                "iq_angle": 1.0424216022298305,
+                "threshold": 97.67804018385452,
+                "iq_angle": -0.17723437520972193,
                 "mixer_drive_g": 0.0,
                 "mixer_drive_phi": 0.0,
                 "mixer_readout_g": 0.0,

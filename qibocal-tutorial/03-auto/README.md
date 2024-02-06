@@ -2,15 +2,14 @@
 
 `Qibocal` provides the infrastucture to perform a sequence of routines following
 the dependencies defined by the user.
-It is possible to defined the tree dependencies directly in the runcard using the
+It is possible to define the tree dependencies directly in the runcard using the
 keywords `priority` and `next`.
 
-`priority` is an integer, the `Executor` in `Qibocal` runs all the routines in the
+`priority` is an integer. The `Executor` in `Qibocal` runs all the routines in the
 runcard in an increasing order of priority. It's mandatory that the starting routine
-has priority 0.
+has priority zero.
 
-The `next` keyword defines all the routines that have to be executed after onether
-one.
+The `next` keyword defines all routines to be executed after the current one.
 
 If we want to perform a single shot classification after a qubit spettroscopy
 the runcard will look like this:
@@ -21,7 +20,7 @@ platform: dummy
 qubits: [0]
 
 actions:
-    
+
   - id: qubit spectroscopy
     priority: 0
     operation: qubit_spectroscopy
@@ -32,7 +31,7 @@ actions:
       freq_width: 2_000_000
       freq_step: 500_000
       nshots: 10
-  
+
   - id: single shot classification
     priority: 10
     operation: single_shot_classification
