@@ -48,7 +48,7 @@ results = platform.execute_pulse_sequence(sequence, options)
 
 `Platform` represents the lab configuration, containing all information about the available qubits and orchestrating the instruments.
 
-`PulseSequence` contains the pulses to be executed. 
+`PulseSequence` contains the pulses to be executed.
 Pulses can be constructed manually through the pulse API,
 or via the `platform`.
 
@@ -134,15 +134,15 @@ class Platform:
     def disconnect(self):
 
     def execute_pulse_sequence(
-        self, 
-        sequences: PulseSequence, 
+        self,
+        sequences: PulseSequence,
         options: ExecutionParameters
     ):
 
     def sweep(
-        self, 
-        sequence: PulseSequence, 
-        options: ExecutionParameters, 
+        self,
+        sequence: PulseSequence,
+        options: ExecutionParameters,
         *sweepers: Sweeper
     ):
 
@@ -193,11 +193,11 @@ def create():
 
     channels = ChannelMap()
     channels |= Channel(
-        "readout", 
+        "readout",
         port=instrument.ports("o1")
     )
     channels |= Channel(
-        "feedback", 
+        "feedback",
         port=instrument.ports("i1", output=False)
     )
 
@@ -206,9 +206,9 @@ def create():
     qubit.feedback = channels["feedback"]
 
     return Platform(
-        "myplatform", 
-        qubits={qubit.name: qubit}, 
-        pairs={}, 
+        "myplatform",
+        qubits={qubit.name: qubit},
+        pairs={},
         instruments={instrument.name: instrument},
     )
 ```
@@ -304,7 +304,7 @@ characterization:
 
 ```
 
-*Let's now put it all together...* 
+*Let's now put it all together...*
 
 </div>
 
@@ -316,7 +316,7 @@ characterization:
 clicks: 4
 ---
 
-# Creating platforms 
+# Creating platforms
 
 using `qibolab.serialize`
 
@@ -345,7 +345,7 @@ qibolab_platforms/
 <br>
 
 ```sh
-export QIBOLAB_PLATFORMS=./qibolab_platforms 
+export QIBOLAB_PLATFORMS=./qibolab_platforms
 ```
 
 </div>
@@ -360,7 +360,7 @@ def create():
 
     channels = ChannelMap()
     channels |= ...
-    
+
     runcard = load_runcard(FOLDER)
     qubits, couplers, pairs = load_qubits(runcard)
 
@@ -369,10 +369,10 @@ def create():
     qubits[0].drive = channels["drive"]
 
     return Platform(
-        "myplatform", 
-        qubits, 
-        pairs, 
-        instruments={instrument.name: instrument}, 
+        "myplatform",
+        qubits,
+        pairs,
+        instruments={instrument.name: instrument},
     )
 ```
 
@@ -468,7 +468,7 @@ results = platform.sweep(sequence, options, sweeper)
 
 <div flex="~ col justify-center" v="full" p="t-10">
 
-Executing sweeps in real time is usually faster because 
+Executing sweeps in real time is usually faster because
 it requires less communication with the instruments.
 
 </div>
@@ -508,7 +508,7 @@ results = platform.execute_pulse_sequences(sequences, options)
 
 <div flex="~ col justify-center" v="full" p="t-10">
 
-Passing multiple sequences in a single call is usually faster because 
+Passing multiple sequences in a single call is usually faster because
 it requires less communication with the instruments.
 
 Sometimes sequences need to be *batched* in order to fit in the instruments
