@@ -580,17 +580,11 @@ layout: center
 ---
 layout: iframe
 # the web page source
-url: https://qibo.science/qibocal/stable/getting-started/runcard.html
+url: https://qibo.science/qibocal/latest/getting-started/runcard.html
 ---
 
 ---
 layout: iframe
 
-url: https://qibo.science/qibocal/stable/tutorials/advanced.html#how-to-use-qibocal-as-a-library
----
-
----
-layout: iframe
-
-url: https://qibo.science/qibocal/stable/tutorials/advanced.html
+url: https://qibo.science/qibocal/latest/tutorials/advanced.html
 ---
