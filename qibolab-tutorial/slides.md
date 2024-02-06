@@ -390,7 +390,7 @@ clicks: 2
 
 <div flex="~ col" p="t-5">
 
-```py {all|16-18|10-11}{at:0}
+```py {all|16-18|11-12}{at:0}
 
 platform = create_platform("myplatform")
 
@@ -485,7 +485,7 @@ clicks: 1
 
 <div flex="~ col" p="t-5">
 
-```py {3-9|11-17}
+```py {3-9|10-17}
 platform = create_platform("myplatform")
 
 nsequences = 20
