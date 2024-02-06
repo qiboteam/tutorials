@@ -1,0 +1,18 @@
+{
+    "title": "test",
+    "backend": "qibolab",
+    "platform": "dummy",
+    "date": "2024-02-03",
+    "start-time": "06:20:26",
+    "end-time": "06:20:26",
+    "versions": {
+        "qibo": "0.2.5",
+        "numpy": "1.26.2",
+        "qibolab": "0.1.5",
+        "qibocal": "0.0.7"
+    },
+    "single shot classification": {
+        "acquisition": 0.001120297999932518,
+        "tot": 0.001120297999932518
+    }
+}

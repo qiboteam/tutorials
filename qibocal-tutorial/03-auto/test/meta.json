@@ -1,0 +1,24 @@
+{
+    "title": "test",
+    "backend": "qibolab",
+    "platform": "dummy",
+    "date": "2024-02-06",
+    "start-time": "06:00:45",
+    "end-time": "06:00:47",
+    "versions": {
+        "qibo": "0.2.5",
+        "numpy": "1.24.4",
+        "qibolab": "0.1.5",
+        "qibocal": "0.0.7"
+    },
+    "qubit spectroscopy": {
+        "acquisition": 0.0003029900000228736,
+        "fit": 0.002943119000065053,
+        "tot": 0.0032461090000879267
+    },
+    "single shot classification": {
+        "acquisition": 0.000995172999978422,
+        "fit": 0.008788378999952329,
+        "tot": 0.00978355199993075
+    }
+}
