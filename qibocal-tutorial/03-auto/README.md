@@ -39,10 +39,10 @@ actions:
         nshots: 5000
 ```
 
-We are now ready to execute the protocol using `qq acquire`.
+We are now ready to execute the protocol using `qq auto`.
 
 ```sh
-qq acquire <path_to_yaml> -o <output_folder>
+qq auto <path_to_yaml> -o <output_folder>
 ```
 This command is the same as running sequentially [`qq acquire`](../01-acquire/README.md),
 [`qq fit`](../02-fit/README.md), [`qq report`](../00-cli/README.md)
