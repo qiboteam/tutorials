@@ -533,7 +533,7 @@ platform = create_platform("....")
 qubits = platform.qubits
 
 # we select the protocol
-protocol = Operation.single_shot_classification.value
+experiment = Operation.single_shot_classification.value
 ```
 In order to run a protocol the user needs to specify the parameters.
 ```py
