@@ -27,7 +27,7 @@ clicks: 3
 
 <div flex="~ col" p="t-5">
 
-```py {all|5|7-9|11-12}
+```py {all|5|7-9|11-12|all}
 from qibolab import create_platform
 from qibolab.pulses import PulseSequence
 from qibolab.execution_parameters import ExecutionParameters
@@ -68,7 +68,7 @@ clicks: 3
 
 <div flex="~ col" p="t-5">
 
-```py {all|9|10|0}
+```py {all|9|10|0|all}
 from qibolab.pulses import Pulse, PulseType, Rectangular
 
 pulse = Pulse(
@@ -122,7 +122,7 @@ clicks: 4
 
 <div flex="~ col">
 
-```py {1-5|7-9|11-|1-5}
+```py {1-5|7-9|11-|1-5|all}
 @dataclass
 class Platform:
     qubits: QubitMap
@@ -158,7 +158,7 @@ Platform contains information about
 - `pairs`: connectivity and native two-qubit gates
 - `instruments`: used to deploy pulses *(drivers)*
 
-```py {all|5-8}
+```py {all|5-8|all}
 @dataclass
 class Qubit:
     readout_frequency: int
@@ -187,7 +187,7 @@ clicks: 4
 
 <div flex="~ col">
 
-```py {all|2|4-12|14-16|18-23}
+```py {all|2|4-12|14-16|18-23|all}
 def create():
     instrument = DummyInstrument("myinstr", "0.0.0.0:0")
 
@@ -324,7 +324,7 @@ using `qibolab.serialize`
 
 <div flex="~ col">
 
-```sh {all|3|4|5|all}
+```sh {all|3|4|5|all|all}
 qibolab_platforms/
     myplatform/
         platform.py
@@ -352,7 +352,7 @@ export QIBOLAB_PLATFORMS=./qibolab_platforms
 
 <div flex="~ col">
 
-```py {all|8-10|8-10|all}{at:1}
+```py {all|8-10|8-10|all|all}{at:1}
 FOLDER = Path(__file__).parent
 
 def create():
@@ -390,7 +390,7 @@ clicks: 2
 
 <div flex="~ col" p="t-5">
 
-```py {all|16-18|11-12}{at:0}
+```py {all|16-18|11-12|all}{at:0}
 
 platform = create_platform("myplatform")
 
@@ -441,7 +441,7 @@ clicks: 1
 
 <div flex="~ col" p="t-5">
 
-```py {7-12|14-20}
+```py {7-12|14-20|all}
 platform = create_platform("myplatform")
 
 sequence = PulseSequence()
@@ -485,7 +485,7 @@ clicks: 1
 
 <div flex="~ col" p="t-5">
 
-```py {3-9|10-17}
+```py {3-9|10-17|all}
 platform = create_platform("myplatform")
 
 nsequences = 20
