@@ -63,7 +63,7 @@ clicks: 3
 <div flex="~ col" p="t-5">
 
 
-```py{all|7-9|12-14|17-20}
+```py{all|7-9|12-14|17-20|all}
 from dataclasses import dataclass
 from qibocal.auto.operation import Parameters, Data
 from qibolab.platform import Platform
@@ -122,7 +122,7 @@ clicks: 3
 <div flex="~ col" p="t-5">
 
 
-```py{all|7-9|12-13|16-19}
+```py{all|7-9|12-13|16-19|all}
 from dataclasses import dataclass
 from qibolab.platform import Platform
 from qibolab.qubits import QubitId
@@ -180,7 +180,7 @@ clicks: 2
 <div flex="~ col" p="t-5">
 
 
-```py{all|6-9|16-17}
+```py{all|6-9|16-17|all}
 import plotly.graph_objects as go
 from qibolab.qubits import QubitId
 from qibocal.auto.operation import Routine
@@ -296,7 +296,7 @@ clicks: 3
 
 <div h="full" flex="~ row" gap="lg" p="sm b-20">
 <div flex="~ col" p="t-5">
-```py{all|1-9|10-12|13-22}
+```py{all|1-9|10-12|13-22|all}
 from qibolab.platform import Platform
 from ...auto.operation import Qubits
 def acquisition(
