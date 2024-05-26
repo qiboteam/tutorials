@@ -11,7 +11,7 @@ mdc: true
 layout: center
 ---
 
-# Introducing Qibocal 0.0.7
+# Introducing Qibocal 0.0.9
 Qubit calibration using Qibo
 
 ---
@@ -25,10 +25,10 @@ backgroundSize: contain
 ##
 
 In superconducting qubits gates are implemented
-through microwave pulses.
+through microwave pulses with durations of the orders of **nanoseconds**.
 
-Several protocols need to be executed to extract
-specific parameters.
+Several protocols need to be executed to tune such **short pulses**
+and to extract specific parameters.
 
 After an initial calibration more advanced experiments
 can be performed in order to:
@@ -41,6 +41,7 @@ can be performed in order to:
 ---
 layout: image
 image: ./qpu_characterization.svg
+backgroundSize: contain
 ---
 
 
@@ -487,12 +488,11 @@ rotation = rotation
 ```yml
 platform: dummy
 
-qubits: [0,1]
+targets: [0,1]
 
 
 actions:
     - id: rotate
-      priority: 0
       operation: rotation
       parameters:
         theta_start: 0
