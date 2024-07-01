@@ -24,23 +24,7 @@ Qubit calibration using Qibo
 <em> Is it possible to create <strong> from scratch </strong> a framework for all of this?</em>
 </p>
 
----
 
-# Are we re-inventing the wheel?
-
-##
-
-You *could* say so however, compared to our competitors we have different priorities
-
-1. Full open-source approach
-
-2. Academic driven
-
-3. Solutions for self-hosted Quantum Computers
-
-<p align="center">
-<img src="/wheel.png" alt="Intro" width="400" height="400">
-</p>
 
 ---
 transition: slide-up
