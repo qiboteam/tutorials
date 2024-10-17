@@ -15,18 +15,17 @@ actions:
         nshots: 1024
         relaxation_time: 100000
 
-  # - id: qubit flux dependence
-
-  #   operation: qubit_flux
-  #   parameters:
-  #       bias_step: 0.002
-  #       bias_width: 0.1
-  #       drive_amplitude: 0.001
-  #       drive_duration: 4000
-  #       freq_step: 500000
-  #       freq_width: 10000000
-  #       nshots: 1024
-  #       relaxation_time: 20_000
+  - id: qubit flux dependence
+    operation: qubit_flux
+    parameters:
+        bias_step: 0.002
+        bias_width: 0.1
+        drive_amplitude: 0.001
+        drive_duration: 4000
+        freq_step: 500000
+        freq_width: 10000000
+        nshots: 1024
+        relaxation_time: 20_000
 
   - id: resonator flux dependence
     operation: resonator_flux
