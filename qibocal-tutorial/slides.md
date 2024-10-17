@@ -11,8 +11,38 @@ mdc: true
 layout: center
 ---
 
-# Introducing Qibocal 0.0.7
+# Introducing Qibocal
 Qubit calibration using Qibo
+
+---
+
+# How can we start using Quantum Computing?
+
+##
+<p align="center">
+<img src="/intro.png" alt="Intro" width="600" height="600">
+<em> Is it possible to create <strong> from scratch </strong> a framework for all of this?</em>
+</p>
+
+
+
+---
+transition: slide-up
+
+layout: center
+class: text-center
+
+---
+
+# Introducing Qibo
+
+Open-source full stack API for quantum simulation, hardware control and calibration
+
+---
+layout: image
+image: ./Qibo.svg
+backgroundSize: contain
+---
 
 ---
 layout: image-right
@@ -25,10 +55,10 @@ backgroundSize: contain
 ##
 
 In superconducting qubits gates are implemented
-through microwave pulses.
+through microwave pulses with durations of the orders of **nanoseconds**.
 
-Several protocols need to be executed to extract
-specific parameters.
+Several protocols need to be executed to tune such **short pulses**
+and to extract specific parameters.
 
 After an initial calibration more advanced experiments
 can be performed in order to:
@@ -41,6 +71,7 @@ can be performed in order to:
 ---
 layout: image
 image: ./qpu_characterization.svg
+backgroundSize: contain
 ---
 
 
@@ -51,6 +82,43 @@ image: ./qpu_characterization.svg
 <center>
 <img src="/qq_qibocal.svg" alt="Qibocal scheme"   width="600">
 </center>
+
+
+---
+layout: section
+---
+
+# How to encode calibration protocols
+
+---
+
+# Protocol encoding through `Routine` object
+##
+All protocols in Qibocal are encoded through a `Routine` object which is responsible for
+providing how to perform:
+
+* **data acquisition**: connecting to a QPU to run specific circuits or pulse sequences
+* **post-processing**: analyze data to extract relevant features related to calibration
+* **reporting**: display data with plots and tables
+* **updating QPU**: after calibration a new instance of Platform will be generated
+
+
+```py{all}
+@dataclass
+class Routine(Generic[_ParametersT, _DataT, _ResultsT]):
+    """A wrapped calibration routine."""
+
+    acquisition: Callable[[_ParametersT], _DataT]
+    """Data acquisition function."""
+    fit: Callable[[_DataT], _ResultsT] = None
+    """Post-processing function."""
+    report: Callable[[_DataT, _ResultsT], None] = None
+    """Plotting function."""
+    update: Callable[[_ResultsT, Platform], None] = None
+    """Update function platform."""
+```
+
+
 
 ---
 clicks: 3
@@ -82,7 +150,7 @@ class RoutineData(Data):
 
 def acquisition(params: RoutineParameters,
                 platform: Platform,
-                qubits: list[QubitId]) -> RoutineData:
+                targets: list[QubitId]) -> RoutineData:
     """Acquisition protocol."""
 
 ```
@@ -139,7 +207,7 @@ def fit(data: RoutineData) -> RoutineResults:
 
 
 def update(results: RoutineResults,
-           qubit: QubitId,
+           target: QubitId,
            platform: Platform) -> None:
     """Updating platform parameters'."""
 
@@ -187,7 +255,7 @@ from qibocal.auto.operation import Routine
 
 
 def report(data: RoutineData,
-           qubit: QubitId,
+           target: QubitId,
            results: RoutineResults) -> tuple[list[go.Figure], str]:
     """Updating platform parameters'."""
 
@@ -298,11 +366,12 @@ clicks: 3
 <div flex="~ col" p="t-5">
 ```py{all|1-9|10-12|13-22|all}
 from qibolab.platform import Platform
+from qibolab.qubits import QubitId
 from ...auto.operation import Qubits
 def acquisition(
     params: RotationParameters,
     platform: Platform,
-    qubits: Qubits,
+    targets: list[QubitId],
 ) -> RotationData:
 
     angles = np.arange(params.theta_start, params.theta_end, params.theta_step)
@@ -313,7 +382,7 @@ def acquisition(
 
         circuit = Circuit(platform.nqubits)
 
-        for qubit in qubits:
+        for qubit in targets:
             circuit.add(gates.RX(qubit, theta=angle))
             circuit.add(gates.M(qubit))
 
@@ -355,7 +424,7 @@ clicks: 3
 
         result = circuit(nshots=params.nshots)
 
-        for qubit in qubits:
+        for qubit in targets:
 
             prob = result.probabilities(qubits=[qubit])[0]
 
@@ -473,11 +542,18 @@ rotation = Routine(acquisition, fit, plot)
 # other imports...
 from rotate import rotation
 
-class Operation(Enum):
-## other protocols...
-rotation = rotation
-```
 
+__all__ = [
+    # other protocols....
+    "rotation",
+]
+```
+<em>
+We are working on a
+<a href="https://github.com/qiboteam/qibocal/pull/869">
+ better way </a>
+to expose external protocols.
+</em>
 </div>
 </p>
 <p v-click="2">
@@ -487,12 +563,11 @@ rotation = rotation
 ```yml
 platform: dummy
 
-qubits: [0,1]
+targets: [0,1]
 
 
 actions:
     - id: rotate
-      priority: 0
       operation: rotation
       parameters:
         theta_start: 0
@@ -524,44 +599,85 @@ Qibocal also allows executing protocols without the standard interface.
 <p v-click="1">
 We show how to run a single protocol using Qibocal as a library
 ```py
-from qibocal.protocols.characterization import Operation
+import pathlib
 from qibolab import create_platform
+from qibocal.auto.execute import Executor
+from qibocal.auto.mode import ExecutionMode
+from qibocal.protocols import t1_signal
 
 # allocate platform
 platform = create_platform("....")
-# get qubits from platform
-qubits = platform.qubits
+# creare executor
+executor = Executor.create(
+  platform=platform,
+  output=pathlib.Path("experiment_data")
+)
+```
 
-# we select the protocol
-experiment = Operation.single_shot_classification.value
-```
-In order to run a protocol the user needs to specify the parameters.
-```py
-parameters = experiment.parameters_type.load(dict(nshots=1024))
-```
 </p>
 </div>
 <p v-click="2">
 <div flex="~ col">
-The user can perform the acquisition using <em>experiment.acquisition</em>
+In order to run a protocol the user needs to specify the parameters.
 ```py
-data, acquisition_time = experiment.acquisition(
-    params=parameters, platform=platform, qubits=qubits)
+t1_params = {
+    "id": "t1_experiment",
+    "targets": [0],  # we are defining here which qubits to analyze
+    "operation": "t1_signal",
+    "parameters": {
+        "delay_before_readout_start": 0,
+        "delay_before_readout_end": 20_000,
+        "delay_before_readout_step": 50,
+    },
+}
 ```
-The fitting corresponding to the experiment can be launched in the following way:
+The user can perform acquisition and fit in the following way
 ```py
-fit, fit_time = experiment.fit(data)
-```
-it is also possible to access the plots and the tables with the following lines.
-```py
-# Plot for qubit 0
-qubit = 0
-figs, html_content = experiment.report(
-    data=data, qubit=0, fit=fit)
+executor.run_protocol(t1_signal, t1_params, ExecutionMode.ACQUIRE)
+executor.run_protocol(t1_signal, t1_params, ExecutionMode.FIT)
 ```
 </div>
 </p>
 </div>
+
+---
+
+# Qibocal as a library
+##
+
+The user can now use the raw data acquired by the quantum processor to perform an arbitrary post-processing analysis.
+This is one of the main advantages of this API compared to the CLI execution.
+
+The history, that contains both the raw data (added with [qibocal.auto.mode.ExecutionMode.ACQUIRE](https://qibo.science/qibocal/latest/api-reference/qibocal.auto.html#qibocal.auto.mode.ExecutionMode.ACQUIRE))
+and the fit data ([added with qibocal.auto.mode.ExecutionMode.FIT](https://qibo.science/qibocal/latest/api-reference/qibocal.auto.html#qibocal.auto.mode.ExecutionMode.FIT)) can be accessed
+
+```py
+history = executor.history
+t1_res = history["t1_experiment"]  # id of the protocol
+
+data = t1_res.data  # raw data
+results = t1_res.results  # fit data
+```
+
+In particular, the history object returns a dictionary that links the id of the experiments with the [qibocal.auto.task.Completed](https://qibo.science/qibocal/latest/api-reference/qibocal.auto.html#qibocal.auto.task.Completed) object
+---
+layout: section
+---
+
+# Latest developments
+
+---
+
+# Latest developments
+##
+We are currently working on the following:
+
+* Syntax for calibration scripts
+* Two qubit gates protocols with cross resonance
+* Documentation for all experiments
+* Two qubit RB and interleaved RB
+* Two qubit state tomography
+* Advanced fits for resonators (UNIMIB)
 
 
 ---
